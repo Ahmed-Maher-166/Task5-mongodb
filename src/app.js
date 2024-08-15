@@ -1,106 +1,109 @@
-const mongodb = require('mongodb');
-const MongoClient = mongodb.MongoClient;
-
-const connectionUrl = 'mongodb://127.0.0.1:27017';
-const dbname = 'proj-1';
-
-MongoClient.connect(connectionUrl, { useNewUrlParser: true, useUnifiedTopology: true }, (error, res1) => {
-    if (error) {
-        return console.log('Error has occurred:', error);
+const mongodb = require ('mongodb')
+const mongoClient = mongodb.MongoClient
+const connectionUrl = 'mongodb://127.0.0.1:27017'
+const dbname = "exam"
+mongoClient.connect(connectionUrl , (error,res1) =>{
+    if(error){
+       return  console.log('error has occured')
     }
+    console.log('All Perf')
 
-    const db = res1.db(dbname);
+    const db = res1.db(dbname)
+     db.collection('exams').insertOne({
+            name : 'ahmed maher',
+            degree : 30
+        },(error , data) => {
+            if(error){
+                console.log('Unable to insert Data')
+            }
+            console.log(data)
+        })
+     db.collection ('exams').insertMany(
+            [
+             {
+                 name: 'islam mohamoud',
+                 degree: 29
+             },
+             {
+                 name: 'maher ahmed',
+                 degree: 20
+             },
+             {
+                 name: 'dowlat ahmed',
+                 degree: 25
+             },
+             {
+                 name: 'abellatif maher',
+                 degree: 29
+             },
+             {
+                 name: 'abdo ezzat',
+                 degree: 27
+             },
+             {
+                 name: 'abdo eid',
+                 degree: 24
+             },
+             {
+                 name: 'hassan ahmed',
+                 degree: 24
+             },
+             {
+                 name: 'hassan hesham',
+                 degree: 24
+             },
+             {
+                 name: 'salah ahmed',
+                 degree: 24
+             }] , (error,data)=>{
+                 if(error){
+                     console.log('Unable to insert data')
+                 }
+                 console.log(data.insertedCount)
+             } 
+         )   
+     db.collection('exams').findOne({_id:mongodb.ObjectId("66be26b845dd04125693f8ca")}
+         , (error,user) =>{
+            if(error){
+                console.log('Unable to insert data')
+            }
+            console.log(user)
+         })
+     db.collection('exams').find({degree:24}).toArray((error , users)=>{
+        if (error) {
+            return console.log('error has occured')
+        }
+        console.log(users)
+      })
+     db.collection('exams').find({degree:24}).limit(4).toArray((error , users)=>{
+        if (error) {
+            return console.log('error has occured')
+        }
+        console.log(users)
+      })
+     db.collection("exams").updateOne({_id:mongodb.ObjectId("66be26b845dd04125693f8ca")},{
+        $set:{name: "Maher Ahmed" },
+        // $set:{name: "Osama" , age: 30 },
+        $inc: {degree: 23}
+     }).
+     then((data1)=>{console.log(data1.modifiedCount)})
+     .catch((error)=> {console.log(error)}) 
+    
+     db.collection('exams').updateMany({},{
+        $inc: {degree: 10}
+    }).
+    then((data1)=>{console.log(data1.modifiedCount)})
+    .catch((error)=> {console.log(error)})
 
-    // db.collection('users').insertOne({
-    //     name: 'Ahmed',
-    //     age: 20
-    // }, (error, data) => {
-    //     if (error) {
-    //         return console.log("Unable to insert data:", error);
-    //     }
-    //     console.log("Inserted document ID:", data.insertedId);
-    // });
+     db.collection('exams').deleteOne({_id:mongodb.ObjectId("66be26b845dd04125693f8ca")})
+         .then((data1)=>{console.log(data1.deletedCount)})
+         .catch((error)=> {console.log(error)})
 
-    // db.collection('users').insertOne({
-    //     name: 'Abdellatif maher',
-    //     age: 25
-    // }, (error, data) => {
-    //     if (error) {
-    //         return console.log("Unable to insert data:", error);
-    //     }
-    //     console.log("Inserted document ID:", data.insertedId);
-    // });
-
-    // db.collection('users').insertMany([
-    //     { name: 'ahmed wael', age: 27 },
-    //     { name: 'reem', age: 27 },
-    //     { name: 'tasneem', age: 27 },
-    //     { name: 'ali', age: 27 },
-    //     { name: 'adelrahamn', age: 27 },
-    //     { name: 'roqua', age: 21 },
-    //     { name: 'fatma', age: 19 },
-    //     { name: 'alaa', age: 23 },
-    //     { name: 'belal', age: 19 },
-    //     { name: 'Hassan', age: 23 }
-    // ], (error, data) => {
-    //     if (error) {
-    //         return console.log("Unable to insert data:", error);
-    //     }
-    //     console.log("Number of documents inserted:", data.insertedCount);
-    // });
-
-    // db.collection('users').find({ age: 27 }).toArray((error, users) => {
-    //     if (error) {
-    //         return console.log('Error has occurred:', error);
-    //     }
-    //     console.log('Users aged 27:', users);
-    // });
-
-    // db.collection('users').find({ age: 27 }).limit(3).toArray((error, users) => {
-    //     if (error) {
-    //         return console.log('Error has occurred:', error);
-    //     }
-    //     console.log('First 3 users aged 27:', users);
-    // });
-
-    //  db.collection("users").updateOne({_id:mongodb.ObjectId("66b370d009d403ff67acb33f")},{
-    //     $set:{name: "AHMED MAHER" },
-    //     $inc: {age: 2}
-    //  }).
-    //  then((data1)=>{console.log(data1.modifiedCount)})
-    //  .catch((error)=> {console.log(error)})
-
-    //  db.collection("users").updateOne({_id:mongodb.ObjectId("66b370d009d403ff67acb340")},{
-    //     $set:{name: "ABDeElatif maher" },
-    //     $inc: {age: 2}
-    //  }).
-    //  then((data1)=>{console.log(data1.modifiedCount)})
-    //  .catch((error)=> {console.log(error)})
-
-    //  db.collection("users").updateOne({_id:mongodb.ObjectId("66b370d009d403ff67acb341")},{
-    //     $set:{name: "fatma  maher" },
-    //     $inc: {age: 2}
-    //  }).
-    //  then((data1)=>{console.log(data1.modifiedCount)})
-    //  .catch((error)=> {console.log(error)})
-    //  db.collection("users").updateOne({_id:mongodb.ObjectId("66b370d009d403ff67acb342")},{
-    //     $set:{name: "maher ahmed" },
-    //     $inc: {age: 2}
-    //  }).
-    //  then((data1)=>{console.log(data1.modifiedCount)})
-    //  .catch((error)=> {console.log(error)})
-    // db.collection('users').updateMany({}, {
-    //     $inc:{age:10 }}).
-    //     then(data1 => {    console.log('Number of documents updated:', data1.modifiedCount);})
-    //     .catch(error => {
-    //     console.log('Update error:', error);
-    // });
-
-    db.collection('users').deleteMany({ age: 37 })
-    .then(data1 => {
-        console.log('Number of documents deleted:', data1.deletedCount);
-    })
-    .catch(error => {
-        console.log('Delete error:', error);
-    });
-});
+     db.collection('exams').deleteMany({degree:34})
+        .then((data1)=>{console.log(data1.deletedCount)})
+        .catch((error)=> {console.log(error)})
+  
+   //   db.collection('exams').deleteMany({})
+   //        .then((data1)=>{console.log(data1.deletedCount)})
+   //         .catch((error)=> {console.log(error)})
+})
